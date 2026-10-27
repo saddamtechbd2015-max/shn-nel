@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streaming Platform Job Search & Opportunities</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #e50914;
+            --primary-dark: #b20710;
+            --bg-dark: #0b0f19;
+            --card-bg: #151c2d;
+            --card-border: #222e48;
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 520px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            overflow: hidden;
+            margin: auto;
+        }
+
+        .header-banner {
+            background: linear-gradient(135deg, #1f1012, #3a0d11);
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .geo-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(229, 9, 20, 0.15);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #ff6b6b;
+            border: 1px solid rgba(229, 9, 20, 0.3);
+        }
+
+        .header-banner h1 {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .header-banner p {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .content-body {
+            padding: 25px;
+        }
+
+        .step-container {
+            display: none;
+        }
+
+        .step-container.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .step-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 18px;
+            color: var(--text-main);
+            line-height: 1.4;
+        }
+
+        .options-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .option-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--card-border);
+            padding: 15px 18px;
+            border-radius: 12px;
+            color: var(--text-main);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .option-btn:hover {
+            background: rgba(229, 9, 20, 0.08);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .option-btn i {
+            color: var(--text-muted);
+        }
+
+        .option-btn:hover i {
+            color: var(--primary);
+        }
+
+        .progress-container {
+            margin-bottom: 20px;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--primary);
+            width: 33%;
+            transition: width 0.3s ease;
+        }
+
+        .processing-box {
+            text-align: center;
+            padding: 30px 0;
+        }
+
+        .spinner {
+            width: 45px;
+            height: 45px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .claim-btn {
+            display: block;
+            width: 100%;
+            background: var(--primary);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 10px 25px rgba(229, 9, 20, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .claim-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(229, 9, 20, 0.4);
+        }
+
+        .trust-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 20px;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .trust-badge i {
+            color: var(--primary);
+        }
+
+        .footer-note {
+            text-align: center;
+            font-size: 10px;
+            color: #64748b;
+            max-width: 500px;
+            margin-top: 20px;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header-banner">
+            <div class="geo-badge">
+                <i class="fa-solid fa-location-dot"></i> United States Only
+            </div>
+            <h1>Streaming Platform Job Search</h1>
+            <p>Explore available remote positions and platform opportunities through our quick matching guide.</p>
+        </div>
+
+        <div class="content-body">
+            <div class="progress-container">
+                <div class="progress-info">
+                    <span id="stepText">Step 1 of 3</span>
+                    <span id="percentText">33% Completed</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progressBar" style="width: 33%;"></div>
+                </div>
+            </div>
+
+            <!-- Step 1 -->
+            <div class="step-container active" id="step1">
+                <div class="step-title">Are you currently located in the United States?</div>
+                <div class="options-group">
+                    <button class="option-btn" onclick="nextStep(2)">
+                        <span>Yes, I reside in the US</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                    <button class="option-btn" onclick="nextStep(2)">
+                        <span>No</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="step-container" id="step2">
+                <div class="step-title">What type of platform positions or tasks interest you most?</div>
+                <div class="options-group">
+                    <button class="option-btn" onclick="nextStep(3)">
+                        <span>Content Review & Evaluation</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                    <button class="option-btn" onclick="nextStep(3)">
+                        <span>Remote Support & Assistance</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                    <button class="option-btn" onclick="nextStep(3)">
+                        <span>General Platform Jobs</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3: Processing -->
+            <div class="step-container" id="step3">
+                <div class="processing-box">
+                    <div class="spinner"></div>
+                    <div style="font-size: 15px; font-weight: 600; margin-bottom: 6px;">Matching Job Listings...</div>
+                    <p style="font-size: 12px; color: var(--text-muted);">Retrieving available platform opportunities...</p>
+                </div>
+            </div>
+
+            <!-- Step 4: Final Claim -->
+            <div class="step-container" id="step4">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <i class="fa-solid fa-circle-check" style="font-size: 48px; color: var(--primary); margin-bottom: 12px;"></i>
+                    <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 6px;">Opportunities Found!</h3>
+                    <p style="font-size: 13px; color: var(--text-muted);">Your profile matches available streaming platform search listings. Click below to view open positions.</p>
+                </div>
+                <!-- Your Tracking Link Integrated Here -->
+                <a href="https://linkthem.net/?offer_id=973&aff_id=207494" target="_blank" class="claim-btn">
+                    View Available Positions <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="trust-badge">
+                <i class="fa-solid fa-shield-halved"></i> Secure Job Search Engine Portal
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-note">
+        Disclaimer: This independent platform serves as a job search guide and directory. It does not guarantee employment and is not an employer or direct hiring agent.
+    </div>
+
+    <script>
+        function nextStep(step) {
+            if(step === 2) {
+                document.getElementById('step1').classList.remove('active');
+                document.getElementById('step2').classList.add('active');
+                document.getElementById('progressBar').style.width = '66%';
+                document.getElementById('stepText').innerText = 'Step 2 of 3';
+                document.getElementById('percentText').innerText = '66% Completed';
+            } else if(step === 3) {
+                document.getElementById('step2').classList.remove('active');
+                document.getElementById('step3').classList.add('active');
+                document.getElementById('progressBar').style.width = '100%';
+                document.getElementById('stepText').innerText = 'Step 3 of 3';
+                document.getElementById('percentText').innerText = '100% Completed';
+
+                setTimeout(() => {
+                    document.getElementById('step3').classList.remove('active');
+                    document.getElementById('step4').classList.add('active');
+                }, 2000);
+            }
+        }
+    </script>
+</body>
+</html>
